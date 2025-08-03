@@ -3,7 +3,7 @@ import tempfile
 import os
 import shutil
 import openai
-from moviepy.editor import VideoFileClip
+from moviepy import VideoFileClip
  # Your working import
 import ffmpeg
 import re
@@ -17,7 +17,7 @@ except Exception as e:
     st.error(f"FFmpeg not found: {e}")
 
 # --- API Key from environment/secrets ---
-openai.api_key = os.environ.get("OPENAI_API_KEY")  # Use secrets in Streamlit Cloud
+openai_api_key = os.environ.get("OPENAI_API_KEY")  # Use secrets in Streamlit Cloud
 
 st.title("AI Video Shortener (with FFmpeg Debug)")
 st.markdown("""

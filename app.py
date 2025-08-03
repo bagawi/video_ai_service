@@ -109,7 +109,7 @@ if uploaded_file:
         # --- Extract highlight clip ---
         with st.spinner("Extracting highlight clip..."):
             try:
-                highlight_clip = VideoFileClip(video_path).subclip(start_time, end_time)
+                highlight_clip = VideoFileClip(video_path).subclipped(start_time, end_time)
                 highlight_local = "highlight_to_burn.mp4"
                 highlight_clip.write_videofile(highlight_local, codec='libx264', audio_codec='aac')
             except Exception as e:

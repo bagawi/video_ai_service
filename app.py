@@ -4,7 +4,7 @@ import os
 import shutil
 import openai
 from moviepy import VideoFileClip  # Your working import
-import ffmpeg
+import ffmpeg.editor
 import re
 import subprocess
 

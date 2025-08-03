@@ -8,11 +8,20 @@ from moviepy import VideoFileClip
 import ffmpeg
 import re
 
+import subprocess
+import streamlit as st
+
+try:
+    version = subprocess.check_output(['ffmpeg', '-version']).decode()
+    st.info(f"FFmpeg found:\n{version.splitlines()[0]}")
+except Exception as e:
+    st.error(f"FFmpeg not found: {e}")
+
 # -- CONFIG --
 import os
 openai.api_key = os.environ.get("OPENAI_API_KEY")
 
-  # <--- Replace with your OpenAI API key
+ 
 
 st.title("AI Video Shortener (with Robust FFmpeg Debugging)")
 st.markdown(
@@ -27,7 +36,8 @@ st.markdown(
 
 desired_length = st.slider("Length of summary video (seconds)", 30, 180, 60, step=10)
 uploaded_file = st.file_uploader("Choose a video...", type=["mp4", "mov", "avi"])
-subtitle_language = st.selectbox("Subtitle language", ["Original"])  # Ready for extension
+#subtitle_language = st.selectbox("Subtitle language", ["Original"])  # Ready for extension
+subtitle_language = st.selectbox("Subtitle language", ["Original", "Arabic", "English"])
 
 if uploaded_file:
     # --- Save uploaded video to temp file ---
@@ -117,6 +127,32 @@ if uploaded_file:
 
         srt_local = "highlight_to_burn.srt"
         write_srt(segments, srt_local, start_time, end_time)
+
+
+def translate_segments(segments, target_language):
+    if target_language == "Original":
+        return segments
+    translated = []
+    for seg in segments:
+        gpt_prompt = f"Translate this to {target_language}:\n\n{seg['text']}"
+        try:
+            resp = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=[{"role": "user", "content": gpt_prompt}],
+                max_tokens=128,
+                temperature=0.3,
+            )
+            seg_copy = seg.copy()
+            seg_copy['text'] = resp.choices[0].message.content.strip()
+            translated.append(seg_copy)
+        except Exception as e:
+            seg_copy = seg.copy()
+            seg_copy['text'] = seg['text']
+            translated.append(seg_copy)
+    return translated
+
+segments_for_srt = translate_segments(segments, subtitle_language)
+# Then use segments_for_srt for your SRT writing function
 
         # --- Preview the SRT file ---
         with open(srt_local, "r", encoding="utf-8") as srtf:

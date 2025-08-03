@@ -128,7 +128,7 @@ if uploaded_file:
         write_srt(segments, srt_local, start_time, end_time)
 
 
-def translate_segments(segments, target_language):
+  def translate_segments(segments, target_language):
     if target_language == "Original":
         return segments
     translated = []

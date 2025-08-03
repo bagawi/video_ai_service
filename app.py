@@ -9,12 +9,11 @@ import ffmpeg
 import re
 
 import subprocess
-import streamlit as st
 
-    try:
+try:
         version = subprocess.check_output(['ffmpeg', '-version']).decode()
         st.info(f"FFmpeg found:\n{version.splitlines()[0]}")
-    except Exception as e:
+except Exception as e:
         st.error(f"FFmpeg not found: {e}")
 
 # -- CONFIG --

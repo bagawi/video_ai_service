@@ -42,7 +42,7 @@ def translate_segments(segments, target_language):
         gpt_prompt = f"Translate this to {target_language}:\n\n{seg['text']}"
         try:
             resp = client.chat.completions.create(
-                model="gpt-3.5-turbo",
+                model="gpt-4o",
                 messages=[{"role": "user", "content": gpt_prompt}],
                 max_tokens=128,
                 temperature=0.3,
@@ -82,7 +82,7 @@ if uploaded_file:
                 f"{segments_text}"
             )
             response = client.chat.completions.create(
-                model="gpt-3.5-turbo",
+                model="gpt-4o",
                 messages=[{"role": "user", "content": prompt}],
                 max_tokens=32,
                 temperature=0.1,

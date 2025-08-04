@@ -10,17 +10,17 @@ import re
 import subprocess
 
 # --- Check FFmpeg availability ---
-try:
-    version = subprocess.check_output(['ffmpeg', '-version']).decode()
-    st.info(f"FFmpeg found:\n{version.splitlines()[0]}")
-except Exception as e:
-    st.error(f"FFmpeg not found: {e}")
-
+#try:
+   # version = subprocess.check_output(['ffmpeg', '-version']).decode()
+  #  st.info(f"FFmpeg found:\n{version.splitlines()[0]}")
+#except Exception as e:
+ #   st.error(f"FFmpeg not found: {e}")
+#
 # --- API Key from environment/secrets ---
 openai_api_key = os.environ.get("OPENAI_API_KEY")  # Use secrets in Streamlit Cloud
 client = openai.OpenAI(api_key=openai.api_key)
 
-st.title("AI Video Shortener (with FFmpeg Debug)")
+st.title("AI Video Shortener ")
 st.markdown("""
     Upload a video, and this AI app will:
     - Transcribe it

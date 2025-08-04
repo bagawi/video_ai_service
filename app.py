@@ -18,6 +18,7 @@ except Exception as e:
 
 # --- API Key from environment/secrets ---
 openai_api_key = os.environ.get("OPENAI_API_KEY")  # Use secrets in Streamlit Cloud
+client = openai.OpenAI(api_key=openai.api_key)
 
 st.title("AI Video Shortener (with FFmpeg Debug)")
 st.markdown("""
@@ -40,7 +41,7 @@ def translate_segments(segments, target_language):
     for seg in segments:
         gpt_prompt = f"Translate this to {target_language}:\n\n{seg['text']}"
         try:
-            resp = openai.ChatCompletion.create(
+            resp = client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=[{"role": "user", "content": gpt_prompt}],
                 max_tokens=128,
@@ -80,7 +81,7 @@ if uploaded_file:
                 f"Reply with only the start and end times in seconds, separated by a dash (e.g., 14.2-74.2):\n\n"
                 f"{segments_text}"
             )
-            response = openai.ChatCompletion.create(
+            response = client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=[{"role": "user", "content": prompt}],
                 max_tokens=32,
